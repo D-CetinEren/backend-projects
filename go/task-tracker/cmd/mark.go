@@ -2,6 +2,7 @@ package cmd
 
 import (
 	"fmt"
+	"log"
 	"strconv"
 	"time"
 
@@ -63,7 +64,7 @@ func markTaskStatus(args []string, newStatus string) {
 		fmt.Printf("Error saving tasks: %v\n", err)
 		return
 	}
-
+	log.Printf("Task with ID %d status has been changed as %s", id, newStatus)
 	fmt.Printf("Task with ID %d status has been changed as %s\n", id, newStatus)
 }
 

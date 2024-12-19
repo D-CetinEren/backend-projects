@@ -2,6 +2,7 @@ package cmd
 
 import (
 	"fmt"
+	"log"
 	"strings"
 
 	"github.com/D-CetinEren/backend-projects/go/task-tracker/internal/task"
@@ -19,17 +20,17 @@ var addCmd = &cobra.Command{
 		description := strings.Join(args, " ")
 		tasks, err := task.ReadTasks()
 		if err != nil {
-			fmt.Printf("Error reading tasks: %v", err)
+			log.Printf("Error reading tasks: %v", err)
 			return
 		}
 		newTask := task.NewTask(description)
 		newTask.ID = len(tasks) + 1
 		tasks = append(tasks, newTask)
 		if err := task.WriteTasks(tasks); err != nil {
-			fmt.Printf("Error writing tasks: %v", err)
+			log.Printf("Error writing tasks: %v", err)
 			return
 		}
-		fmt.Printf("Task added: %+v", newTask)
+		log.Printf("Task added: %+v", newTask)
 		fmt.Printf("Task added successfully (ID: %d)\n", newTask.ID)
 	},
 }

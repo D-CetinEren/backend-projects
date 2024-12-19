@@ -1,0 +1,11 @@
+2024/12/19 12:17:47 root.go:34: Task tracker started.
+2024/12/19 12:19:20 root.go:34: Task tracker started.
+2024/12/19 12:19:53 root.go:34: Task tracker started.
+2024/12/19 12:19:53 storage.go:44: Tasks written to file: tasks.json
+2024/12/19 12:19:53 add.go:33: Task added: {ID:4 Description:Buy paper Status:todo CreatedAt:2024-12-19 12:19:53.401809774 +0300 +03 m=+0.001926095 UpdatedAt:2024-12-19 12:19:53.401809774 +0300 +03 m=+0.001926095}
+2024/12/19 12:20:17 root.go:34: Task tracker started.
+2024/12/19 12:20:17 storage.go:44: Tasks written to file: tasks.json
+2024/12/19 12:20:17 mark.go:67: Task with ID 4 status has been changed as done
+2024/12/19 12:20:25 root.go:34: Task tracker started.
+2024/12/19 12:20:25 storage.go:44: Tasks written to file: tasks.json
+2024/12/19 12:20:25 mark.go:67: Task with ID 2 status has been changed as done

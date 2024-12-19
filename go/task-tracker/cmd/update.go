@@ -2,6 +2,7 @@ package cmd
 
 import (
 	"fmt"
+	"log"
 	"strconv"
 	"time"
 
@@ -14,7 +15,7 @@ var updateCmd = &cobra.Command{
 	Short: "Update a task",
 	Run: func(cmd *cobra.Command, args []string) {
 		if len(args) < 2 {
-			fmt.Println("Usage: task-tracker update <id> <yeni açıklama>")
+			fmt.Println("Usage: task-tracker update <id> <new description>")
 			return
 		}
 
@@ -52,7 +53,7 @@ var updateCmd = &cobra.Command{
 			fmt.Printf("Error saving tasks: %v\n", err)
 			return
 		}
-
+		log.Printf("Task with ID %d has been updated", id)
 		fmt.Printf("Task with ID %d has been updated\n", id)
 	},
 }

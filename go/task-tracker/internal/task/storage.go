@@ -2,6 +2,7 @@ package task
 
 import (
 	"encoding/json"
+	"log"
 	"os"
 	"path/filepath"
 )
@@ -40,5 +41,6 @@ func WriteTasks(tasks []Task) error {
 	if err := os.WriteFile(filePath, data, 0644); err != nil {
 		return err
 	}
+	log.Printf("Tasks written to file: %s", filePath)
 	return nil
 }

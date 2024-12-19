@@ -2,6 +2,7 @@ package cmd
 
 import (
 	"fmt"
+	"log"
 	"strconv"
 
 	"github.com/D-CetinEren/backend-projects/go/task-tracker/internal/task"
@@ -38,7 +39,7 @@ var deleteCmd = &cobra.Command{
 					fmt.Printf("Error saving tasks: %v\n", err)
 					return
 				}
-
+				log.Printf("Task with ID %d has deleted", id)
 				fmt.Printf("Task with ID %d has deleted\n", id)
 				return
 			}
