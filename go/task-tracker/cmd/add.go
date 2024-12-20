@@ -6,6 +6,7 @@ import (
 	"strings"
 
 	"github.com/D-CetinEren/backend-projects/go/task-tracker/internal/task"
+	"github.com/google/uuid"
 	"github.com/spf13/cobra"
 )
 
@@ -24,7 +25,8 @@ var addCmd = &cobra.Command{
 			return
 		}
 		newTask := task.NewTask(description)
-		newTask.ID = len(tasks) + 1
+		newID := uuid.New().ID()
+		newTask.ID = int(newID)
 		tasks = append(tasks, newTask)
 		if err := task.WriteTasks(tasks); err != nil {
 			log.Printf("Error writing tasks: %v", err)
