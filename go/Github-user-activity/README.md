@@ -1,8 +1,5 @@
-## Backend Projects by [roadmap.sh](https://roadmap.sh)
+# Github-User-Activity
 
-This repository contains a list of project solutions for the [Backend Developer](https://roadmap.sh/backend) roadmap. The projects are divided into three categories: beginner, intermediate, and advanced.Solutions are organized by language(Go and Python).
+## Description
 
-Solution for each project is in the respective folder. The folder name is the same as the project name. Each project folder contains a `readme.md` file that describes the project and the solution.
-
-## Done Tasks With Golang
-* [Task Tracker](https://roadmap.sh/projects/task-tracker)
+In this project, you will build a simple command line interface (CLI) to fetch the recent activity of a GitHub user and display it in the terminal. This project will help you practice your programming skills, including working with APIs, handling JSON data, and building a simple CLI application.
