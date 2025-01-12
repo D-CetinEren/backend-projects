@@ -130,9 +130,9 @@ Logs are stored in the `logs/task-tracker.log` file. Each operation is logged wi
 
 Here are some potential features to enhance the project:
 
-[]Unit Tests
-[]UUID for task IDs
-[]Filtering by date
+- []Unit Tests
+- [X]UUID for task IDs
+- []Filtering by date
 
 ## License
 
