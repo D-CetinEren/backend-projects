@@ -6,3 +6,4 @@ Solution for each project is in the respective folder. The folder name is the sa
 
 ## Done Tasks With Golang
 * [Task Tracker](https://roadmap.sh/projects/task-tracker)
+* [GitHub User Activity](https://roadmap.sh/projects/github-user-activity)
