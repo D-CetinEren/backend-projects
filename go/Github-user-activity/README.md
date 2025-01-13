@@ -105,8 +105,8 @@ Contributions are welcome! Please submit a pull request or file an issue for fea
 ## **To-Do List**
 
 ### **Basic Enhancements**
-- [ ] Handle GitHub API rate limits with user feedback.
-- [ ] Add filtering options for event types (e.g., push, issue, star).
+- [X] Handle GitHub API rate limits with user feedback.
+- [X] Add filtering options for event types (e.g., push, issue, star).
 - [ ] Paginate results to fetch more than 30 events.
 
 ### **Intermediate Features**
