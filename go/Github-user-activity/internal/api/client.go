@@ -1,11 +1,12 @@
 package api
 
 import (
-	"Github-user-activity/internal/models"
 	"encoding/json"
 	"errors"
 	"fmt"
 	"net/http"
+
+	"github.com/D-CetinEren/backend-projects/go/Github-user-activity/internal/models"
 )
 
 // FetchUserActivity fetches recent activity for a GitHub user.

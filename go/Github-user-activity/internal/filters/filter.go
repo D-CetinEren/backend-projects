@@ -1,6 +1,6 @@
 package filters
 
-import "Github-user-activity/internal/models"
+import "github.com/D-CetinEren/backend-projects/go/Github-user-activity/internal/models"
 
 // FilterEventsByType filters events based on the given type.
 func FilterEventsByType(events []models.Event, eventType string) []models.Event {

@@ -1,6 +1,6 @@
 package formatter
 
-import "Github-user-activity/internal/models"
+import "github.com/D-CetinEren/backend-projects/go/Github-user-activity/internal/models"
 
 // FormatEvent formats an event into a user-friendly string.
 func FormatEvent(event models.Event) string {

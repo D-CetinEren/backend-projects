@@ -1,11 +1,12 @@
 package cmd
 
 import (
-	"Github-user-activity/internal/api"
-	"Github-user-activity/internal/filters"
-	"Github-user-activity/internal/formatter"
 	"fmt"
 	"os"
+
+	"github.com/D-CetinEren/backend-projects/go/Github-user-activity/internal/api"
+	"github.com/D-CetinEren/backend-projects/go/Github-user-activity/internal/filters"
+	"github.com/D-CetinEren/backend-projects/go/Github-user-activity/internal/formatter"
 
 	"github.com/spf13/cobra"
 )
