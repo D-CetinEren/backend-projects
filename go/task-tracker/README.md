@@ -13,6 +13,7 @@ Task Tracker is a Command Line Interface (CLI) application that helps users mana
 - **List Tasks**:
   - List all tasks.
   - List tasks by their status: "todo," "in-progress," or "done."
+  - Filter tasks by creation date range using `--start-date` and `--end-date`.
 - **Task Properties**:
   - Unique ID
   - Description
@@ -91,9 +92,21 @@ Below are examples of how to use the CLI commands:
   ```
 - List tasks by status:
   ```bash
-  ./task-tracker list done
-  ./task-tracker list todo
-  ./task-tracker list in-progress
+  ./task-tracker list --status todo
+  ./task-tracker list --status in-progress
+  ./task-tracker list --status done
+  ```
+- List tasks created after a specific date:
+  ```bash
+  ./task-tracker list --start-date 2025-01-01
+  ```
+- List tasks created before a specific date:
+  ```bash
+  ./task-tracker list --end-date 2025-01-10
+  ```
+- List tasks within a date range:
+  ```bash
+  ./task-tracker list --start-date 2025-01-01 --end-date 2025-01-10
   ```
 
 ## Directory Structure
@@ -130,7 +143,7 @@ Logs are stored in the `logs/task-tracker.log` file. Each operation is logged wi
 
 Here are some potential features to enhance the project:
 
-- [] Unit Tests
+- [ ] Unit Tests
 - [X] UUID for task IDs
 - [X] Filtering by date
 
@@ -139,3 +152,4 @@ Here are some potential features to enhance the project:
 This project is licensed under the MIT License. See the LICENSE file for details.
 
 https://roadmap.sh/projects/task-tracker
+
