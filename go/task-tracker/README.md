@@ -132,7 +132,7 @@ Here are some potential features to enhance the project:
 
 - [] Unit Tests
 - [X] UUID for task IDs
-- [] Filtering by date
+- [X] Filtering by date
 
 ## License
 
