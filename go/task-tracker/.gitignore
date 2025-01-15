@@ -1,0 +1,30 @@
+# Binaries
+/task-tracker
+
+# Logs
+logs/
+*.log
+
+# Dependency directories and files
+go.sum
+
+# OS-specific files
+.DS_Store
+Thumbs.db
+
+# Editor and IDE-specific files
+.vscode/
+.idea/
+*.iml
+
+# Test and Coverage Files
+*.test
+*.out
+
+# Temporary files
+*.tmp
+*.temp
+*.swp
+
+# Go workspace-specific files
+vendor/

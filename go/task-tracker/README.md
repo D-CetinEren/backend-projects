@@ -20,6 +20,7 @@ Task Tracker is a Command Line Interface (CLI) application that helps users mana
   - Status (todo, in-progress, done)
   - Creation Date
   - Last Updated Date
+- **Unit Tests**: Comprehensive test cases for all commands to ensure reliability and correctness.
 
 ## Installation
 
@@ -121,11 +122,17 @@ Below are examples of how to use the CLI commands:
 │   ├── delete.go
 │   ├── list.go
 │   ├── mark.go
+│   ├── add_test.go # Unit tests for add command
+│   ├── update_test.go # Unit tests for update command
+│   ├── delete_test.go # Unit tests for delete command
+│   ├── list_test.go # Unit tests for list command
+│   ├── mark_test.go # Unit tests for mark command
 │
 ├── internal/       # Internal packages for task logic
 │   └── task/
 │       ├── task.go
-│       └── storage.go
+│       ├── storage.go
+│       ├── task_test.go # Unit tests for task package
 │
 ├── logs/           # Log files directory
 │   └── task-tracker.log
@@ -143,9 +150,12 @@ Logs are stored in the `logs/task-tracker.log` file. Each operation is logged wi
 
 Here are some potential features to enhance the project:
 
-- [ ] Unit Tests
-- [X] UUID for task IDs
-- [X] Filtering by date
+- [ ] Add more advanced filters (e.g., by priority, tags).
+- [ ] Implement a web interface for managing tasks.
+- [ ] Support exporting tasks to a CSV or JSON file.
+- [ ] Add integration with notification systems.
+- [X] Unit Tests: Added test cases for all major commands.
+- [X] Filtering by date.
 
 ## License
 
