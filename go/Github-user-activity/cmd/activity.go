@@ -11,24 +11,30 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var eventType string
+var (
+	eventType string
+	maxPages  int
+)
 
 var activityCmd = &cobra.Command{
 	Use:   "activity [username]",
 	Short: "Fetch recent GitHub activity for a user",
 	Long: `Fetch recent GitHub activity for the specified user and display it in the terminal.
-You can filter activities by type (e.g., push, issue, star) using the '--type' flag.`,
+You can filter activities by type (e.g., push, issue, star) and control pagination using flags.`,
 	Args: cobra.ExactArgs(1),
 	Example: `
   Fetch all activities for a user:
     github-user-activity activity octocat
 
   Fetch only 'push' events for a user:
-    github-user-activity activity octocat --type push`,
+    github-user-activity activity octocat --type push
+
+  Fetch up to 60 events (2 pages):
+    github-user-activity activity octocat --pages 2`,
 	Run: func(cmd *cobra.Command, args []string) {
 		username := args[0]
 
-		events, err := api.FetchUserActivity(username)
+		events, err := api.FetchUserActivity(username, maxPages)
 		if err != nil {
 			fmt.Printf("Error: %s\n", err)
 			os.Exit(1)
@@ -50,5 +56,6 @@ You can filter activities by type (e.g., push, issue, star) using the '--type' f
 
 func init() {
 	activityCmd.Flags().StringVar(&eventType, "type", "", "Filter events by type (e.g., push, issue, star)")
+	activityCmd.Flags().IntVar(&maxPages, "pages", 1, "Number of pages to fetch (each page contains up to 30 events)")
 	rootCmd.AddCommand(activityCmd)
 }
