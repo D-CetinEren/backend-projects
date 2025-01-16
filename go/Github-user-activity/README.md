@@ -107,11 +107,11 @@ Contributions are welcome! Please submit a pull request or file an issue for fea
 ### **Basic Enhancements**
 - [X] Handle GitHub API rate limits with user feedback.
 - [X] Add filtering options for event types (e.g., push, issue, star).
-- [ ] Paginate results to fetch more than 30 events.
+- [X] Paginate results to fetch more than 30 events.
 
 ### **Intermediate Features**
 - [ ] Support JSON/YAML output for easy integration with other tools.
-- [ ] Implement local caching to reduce API calls.
+- [X] Implement local caching to reduce API calls.
 - [ ] Allow fetching activity for multiple users simultaneously.
 
 ### **Advanced Features**

@@ -1,9 +1,16 @@
 package models
 
-// Event represents a GitHub event structure.
 type Event struct {
-	Type string
-	Repo struct {
-		Name string
-	}
+	ID    string `json:"id"`
+	Type  string `json:"type"`
+	Repo  Repo   `json:"repo"`
+	Actor Actor  `json:"actor"`
+}
+
+type Repo struct {
+	Name string `json:"name"`
+}
+
+type Actor struct {
+	Login string `json:"login"`
 }
