@@ -110,7 +110,7 @@ Contributions are welcome! Please submit a pull request or file an issue for fea
 - [X] Paginate results to fetch more than 30 events.
 
 ### **Intermediate Features**
-- [ ] Support JSON/YAML output for easy integration with other tools.
+- [X] Support JSON/YAML output for easy integration with other tools.
 - [X] Implement local caching to reduce API calls.
 - [ ] Allow fetching activity for multiple users simultaneously.
 
