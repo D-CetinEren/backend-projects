@@ -1,104 +1,101 @@
 # Github-user-activity
 
-**Github-user-activity** is a command-line application (CLI) built with Go, designed to fetch and display the recent activity of a GitHub user using the GitHub API. This tool is helpful for developers and GitHub users who want a quick overview of any user's recent GitHub activities directly in their terminal.
+`Github-user-activity` is a CLI tool written in Go that allows you to fetch, filter, and display recent GitHub activity for a specified user. It supports features like caching, pagination, filtering by event types, and exporting results in different formats (JSON, YAML, or plain text).
 
----
+## Features
 
-## **Directory Structure**
+- **Caching**: Reduces the number of API calls by storing responses locally.
+- **Pagination**: Fetches more than 30 events by iterating over multiple pages.
+- **Event Filtering**: Filters events by type (e.g., `PushEvent`, `IssuesEvent`, `WatchEvent`).
+- **Flexible Output**: Supports output in plain text, JSON, or YAML format.
+- **File Export**: Option to save the output to a file.
 
-```
-github-user-activity/
-├── cmd/
-│   ├── root.go         # Root command
-│   └── activity.go     # 'activity' subcommand
-├── internal/
-│   ├── api.go          # Handles GitHub API communication
-│   ├── formatter.go    # Formats the output
-│   └── activity.go     # Logic to display activities
-├── main.go             # Entry point for the application
-├── go.mod              # Go module file
-└── go.sum              # Dependency file
-```
+## Prerequisites
 
----
+- **Go**: Version 1.23 or higher
+- **GitHub Personal Access Token (PAT)**: Required for making authenticated API requests to avoid rate limiting.
 
-## **Features**
-
-- Fetches recent activity of a GitHub user using the GitHub API.
-- Displays activity details in the terminal, such as:
-  - Pushes to repositories
-  - Starred repositories
-  - Opened issues
-- Handles errors gracefully, including invalid usernames and API failures.
-- Built using the Cobra CLI library, adhering to SOLID principles.
-
----
-
-## **Installation**
-
-### **Prerequisites**
-- Go 1.23 or later
-
-### **Steps to Install**
+## Installation
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/yourusername/github-user-activity.git
-   cd github-user-activity
+   git clone https://github.com/D-CetinEren/Github-user-activity.git
+   cd Github-user-activity
    ```
 
-2. Build the CLI:
+2. Build the project:
    ```bash
    go build -o github-user-activity
    ```
 
-3. Run the application:
+3. Run the binary:
    ```bash
-   ./github-user-activity activity <username>
+   ./github-user-activity
    ```
 
----
+## Usage
 
-## **Usage**
+### Fetch Activity
 
-### **Commands**
-
-#### 1. Display Help
-```bash
-./github-user-activity --help
-```
-
-#### 2. Fetch Recent Activity
+Basic command to fetch a user's activity:
 ```bash
 ./github-user-activity activity <username>
 ```
-- Replace `<username>` with the desired GitHub username.
 
-**Example**:
-```bash
-./github-user-activity activity octocat
+### Options
+
+| Flag             | Description                                                                 |
+|------------------|-----------------------------------------------------------------------------|
+| `--cache-ttl`    | Cache time-to-live in minutes (default: 10).                                |
+| `--max-pages`    | Maximum number of pages to fetch (default: 1).                              |
+| `--event-type`   | Filter events by type (e.g., `PushEvent`, `IssuesEvent`).                    |
+| `--output`       | Output format: `text` (default), `json`, or `yaml`.                         |
+| `--output-file`  | File to write the output.                                                   |
+
+### Examples
+
+1. Fetch the latest activity for user `octocat`:
+   ```bash
+   ./github-user-activity activity octocat
+   ```
+
+2. Fetch activity with caching:
+   ```bash
+   ./github-user-activity activity octocat --cache-ttl 30
+   ```
+
+3. Fetch and filter events by type:
+   ```bash
+   ./github-user-activity activity octocat --event-type PushEvent
+   ```
+
+4. Save output to a file in JSON format:
+   ```bash
+   ./github-user-activity activity octocat --output json --output-file activity.json
+   ```
+
+5. Fetch multiple pages of activity:
+   ```bash
+   ./github-user-activity activity octocat --max-pages 5
+   ```
+
+## Directory Structure
+
 ```
-
-**Output**:
+Github-user-activity/
+├── cmd/                  # CLI commands
+│   ├── root.go           # Root command
+│   └── activity.go       # 'activity' command implementation
+├── internal/             # Internal packages
+│   ├── api/              # GitHub API client and caching logic
+│   ├── cache/            # Local caching implementation
+│   ├── filters/          # Filtering logic
+│   └── formatter/        # Formatting output
+├── models/               # Data models for GitHub events
+├── go.mod                # Go module file
+├── go.sum                # Dependency checksum file
+└── main.go               # Main entry point
 ```
-Recent activity for GitHub user 'octocat':
-- Pushed to repository 'octocat/Spoon-Knife'
-- Starred repository 'octocat/Hello-World'
-- Opened an issue in 'octocat/test-repo'
-```
-
----
-
-## **Development**
-
-### **Testing**
-
-- Write unit tests for each component using Go's `testing` package.
-- Mock API responses for testing.
-
-### **Contributing**
-
-Contributions are welcome! Please submit a pull request or file an issue for feature requests and bug reports.
 
 ---
 
@@ -122,6 +119,9 @@ Contributions are welcome! Please submit a pull request or file an issue for fea
 - [ ] Add contribution analysis (e.g., total commits, pull requests).
 
 ---
+## **Contributing**
+
+Contributions are welcome! Feel free to submit a pull request or open an issue for suggestions and bug reports.
 
 ## **License**
 
