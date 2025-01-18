@@ -2,39 +2,38 @@ package main
 
 import (
 	"fmt"
+
+	"github.com/D-CetinEren/backend-projects/go/number-guessing-game/internal/difficulty"
+	"github.com/D-CetinEren/backend-projects/go/number-guessing-game/internal/game"
+	"github.com/D-CetinEren/backend-projects/go/number-guessing-game/internal/secretnumber"
+	"github.com/D-CetinEren/backend-projects/go/number-guessing-game/internal/welcome"
 )
 
 func main() {
-	welcome.welcome()
-
-	var secret int
-	secret = secretnumber.secretNumber()
-
-	var attempts int
-	attempts = difficulty.selectingDifficulty()
-
-	game.game(secret, attempts)
-
-	var playAgain string
-
-	fmt.Println("Do you want to play again? (yes/no)")
-	fmt.Scan(&playAgain)
+	welcome.Welcome()
 
 	for {
-		fmt.Println("Do you want to play again? (yes/no)")
-		fmt.Scan(&playAgain)
+		secret := secretnumber.SecretNumber()
+		attempts := difficulty.SelectingDifficulty()
 
-		if playAgain == "yes" || playAgain == "no" {
-			break
+		game.Game(secret, attempts)
+
+		var playAgain string
+		for {
+			fmt.Println("Do you want to play again? (yes/no)")
+			fmt.Scan(&playAgain)
+
+			if playAgain == "yes" || playAgain == "no" {
+				break
+			}
+
+			fmt.Println("Invalid input. Please enter 'yes' or 'no'.")
 		}
 
-		fmt.Println("Invalid input. Please enter 'yes' or 'no'.")
-	}
-
-	if playAgain == "yes" {
-		game.game()
-	} else {
-		fmt.Println("Thanks for playing! Goodbye.")
+		if playAgain == "no" {
+			fmt.Println("Thanks for playing! Goodbye.")
+			break
+		}
 	}
 
 }

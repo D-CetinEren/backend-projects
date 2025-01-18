@@ -2,14 +2,16 @@ package game
 
 import "fmt"
 
-func game(secretNumber int, attempts int) {
+func Game(secretNumber, attempts int) {
+	remainder := attempts
 	for attempts > 0 {
 		var guess int
+		fmt.Printf("%d", secretNumber)
 		fmt.Printf("Enter your guess (%d attempts left): ", attempts)
 		fmt.Scan(&guess)
 
 		if guess == secretNumber {
-			fmt.Printf("Congratulations! You guessed the correct number in %d attempts.", attempts)
+			fmt.Printf("Congratulations! You guessed the correct number in %d attempts.\n", remainder-attempts+1)
 			break
 		} else if guess < secretNumber {
 			fmt.Printf("Incorrect! The number is greater than %d\n", guess)

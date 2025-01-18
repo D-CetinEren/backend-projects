@@ -2,7 +2,7 @@ package difficulty
 
 import "fmt"
 
-func selectingDifficulty() (attempts int) {
+func SelectingDifficulty() (attempts int) {
 	fmt.Println("Select difficulty level:")
 	fmt.Println("1. Easy (10 chances)")
 	fmt.Println("2. Medium (5 chances)")
