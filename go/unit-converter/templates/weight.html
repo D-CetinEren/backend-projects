@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head><title>Weight Converter</title></head>
+<body>
+    <h1>Weight Converter</h1>
+    <form method="post" action="/">
+        <input type="hidden" name="unit_type" value="weight">
+        <label>Value to Convert:</label>
+        <input type="text" name="value" required><br>
+        <label>From Unit:</label>
+        <input type="text" name="from_unit" placeholder="e.g., kg" required><br>
+        <label>To Unit:</label>
+        <input type="text" name="to_unit" placeholder="e.g., lb" required><br>
+        <button type="submit">Convert</button>
+    </form>
+    {{if .Result}}
+    <p>Result: {{.Value}} {{.FromUnit}} = {{.Result}} {{.ToUnit}}</p>
+    {{end}}
+    <a href="/?unit=length">Switch to Length</a> | <a href="/?unit=temperature">Switch to Temperature</a>
+</body>
+</html>

@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head><title>Length Converter</title></head>
+<body>
+    <h1>Length Converter</h1>
+    <form method="post" action="/">
+        <input type="hidden" name="unit_type" value="length">
+        <label>Value to Convert:</label>
+        <input type="text" name="value" required><br>
+        <label>From Unit:</label>
+        <input type="text" name="from_unit" placeholder="e.g., m" required><br>
+        <label>To Unit:</label>
+        <input type="text" name="to_unit" placeholder="e.g., km" required><br>
+        <button type="submit">Convert</button>
+    </form>
+    {{if .Result}}
+    <p>Result: {{.Value}} {{.FromUnit}} = {{.Result}} {{.ToUnit}}</p>
+    {{end}}
+    <a href="/?unit=weight">Switch to Weight</a> | <a href="/?unit=temperature">Switch to Temperature</a>
+</body>
+</html>

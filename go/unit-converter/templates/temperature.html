@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head><title>Temperature Converter</title></head>
+<body>
+    <h1>Temperature Converter</h1>
+    <form method="post" action="/">
+        <input type="hidden" name="unit_type" value="temperature">
+        <label>Value to Convert:</label>
+        <input type="text" name="value" required><br>
+        <label>From Unit:</label>
+        <input type="text" name="from_unit" placeholder="e.g., C" required><br>
+        <label>To Unit:</label>
+        <input type="text" name="to_unit" placeholder="e.g., F" required><br>
+        <button type="submit">Convert</button>
+    </form>
+    {{if .Result}}
+    <p>Result: {{.Value}} {{.FromUnit}} = {{.Result}} {{.ToUnit}}</p>
+    {{end}}
+    <a href="/?unit=weight">Switch to Weight</a> | <a href="/?unit=length">Switch to Length</a>
+</body>
+</html>
