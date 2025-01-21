@@ -4,88 +4,140 @@ import (
 	"encoding/json"
 	"fmt"
 	"os"
-	"strings"
+	"sync"
 	"time"
 
 	"github.com/D-CetinEren/backend-projects/go/Github-user-activity/internal/api"
 	"github.com/D-CetinEren/backend-projects/go/Github-user-activity/internal/filters"
 	"github.com/D-CetinEren/backend-projects/go/Github-user-activity/internal/formatter"
+	"github.com/D-CetinEren/backend-projects/go/Github-user-activity/internal/models"
 	"gopkg.in/yaml.v2"
 
 	"github.com/spf13/cobra"
 )
 
 var (
-	cacheTTL     int    // Cache Time-To-Live in minutes
-	maxPages     int    // Maximum number of pages to fetch from the GitHub API
-	eventType    string // Filter events by type
-	outputFormat string // Output format: text (default), json, or yaml
-	outputFile   string // File to write the output
+	cacheTTL   int    // Cache Time-To-Live in minutes
+	maxPages   int    // Maximum number of pages to fetch from the GitHub API
+	eventType  string // Filter events by type
+	output     string // Output format: text, json, yaml
+	outputFile string // File to save the output
 )
 
 var activityCmd = &cobra.Command{
-	Use:   "activity [username]",
-	Short: "Fetch recent GitHub activity for a user",
-	Long: `Fetch recent GitHub activity for the specified user and display it in the terminal or write it to a file.
-This command supports caching to reduce API calls and allows output in different formats.`,
-	Args: cobra.ExactArgs(1),
+	Use:   "activity [usernames...]",
+	Short: "Fetch recent GitHub activity for one or more users",
+	Long: `Fetch recent GitHub activity for the specified users and display it in the terminal or save it to a file.
+This command supports caching to reduce API calls and various output formats.`,
+	Args: cobra.MinimumNArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
-		username := args[0]
+		var wg sync.WaitGroup
+		results := make(chan map[string]interface{}, len(args))
 		ttl := time.Duration(cacheTTL) * time.Minute
 
-		// Fetch user activity with caching
-		events, err := api.FetchUserActivityWithCache(username, maxPages, ttl)
-		if err != nil {
-			fmt.Printf("Error: %s\n", err)
-			os.Exit(1)
+		for _, username := range args {
+			wg.Add(1)
+			go func(username string) {
+				defer wg.Done()
+
+				events, err := api.FetchUserActivityWithCache(username, maxPages, ttl)
+				if err != nil {
+					results <- map[string]interface{}{
+						"username": username,
+						"error":    fmt.Sprintf("Error fetching activity: %v", err),
+					}
+					return
+				}
+
+				filteredEvents := filters.FilterEventsByType(events, eventType)
+				results <- map[string]interface{}{
+					"username": username,
+					"events":   filteredEvents,
+				}
+			}(username)
 		}
 
-		// Filter events by type if specified
-		filteredEvents := filters.FilterEventsByType(events, eventType)
+		wg.Wait()
+		close(results)
 
-		// Generate output
+		allResults := []map[string]interface{}{}
+		for result := range results {
+			allResults = append(allResults, result)
+		}
+
 		var outputData string
-		switch outputFormat {
+		switch output {
 		case "json":
-			jsonData, err := json.MarshalIndent(filteredEvents, "", "  ")
-			if err != nil {
-				fmt.Printf("Error: failed to format output as JSON: %s\n", err)
-				os.Exit(1)
-			}
-			outputData = string(jsonData)
+			outputData = formatJSON(allResults)
 		case "yaml":
-			yamlData, err := yaml.Marshal(filteredEvents)
-			if err != nil {
-				fmt.Printf("Error: failed to format output as YAML: %s\n", err)
-				os.Exit(1)
-			}
-			outputData = string(yamlData)
+			outputData = formatYAML(allResults)
 		default:
-			// Default to text output
-			if len(filteredEvents) == 0 {
-				fmt.Printf("No events found for user '%s' with type '%s'.\n", username, eventType)
-				return
-			}
-
-			var formattedEvents []string
-			for _, event := range filteredEvents {
-				formattedEvents = append(formattedEvents, formatter.FormatEvent(event))
-			}
-			outputData = fmt.Sprintf("Recent activity for GitHub user '%s':\n%s", username,
-				strings.Join(formattedEvents, "\n"))
+			outputData = formatText(allResults)
 		}
 
-		// Write output to file or display in terminal
 		if outputFile != "" {
-			if err := os.WriteFile(outputFile, []byte(outputData), 0644); err != nil {
-				fmt.Printf("Error: failed to write output to file '%s': %s\n", outputFile, err)
+			if err := saveToFile(outputFile, outputData); err != nil {
+				fmt.Printf("Error saving to file: %v\n", err)
 				os.Exit(1)
 			}
-			fmt.Printf("Output written to file '%s'\n", outputFile)
+			fmt.Printf("Output saved to file: %s\n", outputFile)
 		} else {
 			fmt.Println(outputData)
 		}
 	},
+}
+
+func formatJSON(data []map[string]interface{}) string {
+	jsonData, err := json.MarshalIndent(data, "", "  ")
+	if err != nil {
+		fmt.Printf("Error formatting JSON: %v\n", err)
+		os.Exit(1)
+	}
+	return string(jsonData)
+}
+
+func formatYAML(data []map[string]interface{}) string {
+	yamlData, err := yaml.Marshal(data)
+	if err != nil {
+		fmt.Printf("Error formatting YAML: %v\n", err)
+		os.Exit(1)
+	}
+	return string(yamlData)
+}
+
+func formatText(data []map[string]interface{}) string {
+	output := ""
+	for _, result := range data {
+		username := result["username"].(string)
+		if err, exists := result["error"]; exists {
+			output += fmt.Sprintf("Error fetching activity for user '%s': %s\n", username, err)
+		} else {
+			output += fmt.Sprintf("Recent activity for GitHub user '%s':\n", username)
+			for _, event := range result["events"].([]interface{}) {
+				// Assert the type to models.Event
+				if eventMap, ok := event.(map[string]interface{}); ok {
+					var event models.Event
+					eventBytes, _ := json.Marshal(eventMap) // Re-marshal to JSON
+					_ = json.Unmarshal(eventBytes, &event)  // Unmarshal back to models.Event
+					output += formatter.FormatEvent(event) + "\n"
+				} else {
+					output += "Failed to parse event data.\n"
+				}
+			}
+		}
+	}
+	return output
+}
+
+func saveToFile(filename, data string) error {
+	file, err := os.Create(filename)
+	if err != nil {
+		return err
+	}
+	defer file.Close()
+
+	_, err = file.WriteString(data)
+	return err
 }
 
 func init() {
@@ -93,8 +145,8 @@ func init() {
 	activityCmd.Flags().IntVar(&cacheTTL, "cache-ttl", 10, "Cache time-to-live in minutes")
 	activityCmd.Flags().IntVar(&maxPages, "max-pages", 1, "Maximum number of pages to fetch (default is 1)")
 	activityCmd.Flags().StringVar(&eventType, "event-type", "", "Filter events by type (e.g., PushEvent, IssuesEvent)")
-	activityCmd.Flags().StringVar(&outputFormat, "output", "text", "Output format: text (default), json, or yaml")
-	activityCmd.Flags().StringVar(&outputFile, "output-file", "", "File to write the output")
+	activityCmd.Flags().StringVar(&output, "output", "text", "Output format: text, json, yaml")
+	activityCmd.Flags().StringVar(&outputFile, "output-file", "", "File to save the output")
 
 	// Add the activity command to the root command
 	rootCmd.AddCommand(activityCmd)

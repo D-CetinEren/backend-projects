@@ -109,7 +109,7 @@ Github-user-activity/
 ### **Intermediate Features**
 - [X] Support JSON/YAML output for easy integration with other tools.
 - [X] Implement local caching to reduce API calls.
-- [ ] Allow fetching activity for multiple users simultaneously.
+- [X] Allow fetching activity for multiple users simultaneously.
 
 ### **Advanced Features**
 - [ ] Add a repository insights command (e.g., `repos <username>`).
