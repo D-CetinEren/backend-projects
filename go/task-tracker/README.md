@@ -187,7 +187,7 @@ Logs are stored in the `logs/task-tracker.log` file. Each operation is logged wi
 
 Here are some potential features to enhance the project:
 
-- [ ] Add more advanced filters (e.g., by priority, tags)
+- [X] Add more advanced filters (e.g., by priority, tags)
 - [ ] Implement a web interface for managing tasks
 - [ ] Support exporting tasks to CSV or JSON file
 - [ ] Add integration with notification systems
