@@ -9,3 +9,4 @@ Solution for each project is in the respective folder. The folder name is the sa
 * [GitHub User Activity](https://roadmap.sh/projects/github-user-activity)
 * [Number Guessing Game](https://roadmap.sh/projects/number-guessing-game)
 * [Unit Converter](https://roadmap.sh/projects/unit-converter)
+* [Expense Tracker](https://roadmap.sh/projects/expense-tracker)
