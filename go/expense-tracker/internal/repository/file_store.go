@@ -3,6 +3,7 @@ package repository
 import (
 	"encoding/json"
 	"errors"
+	"fmt"
 	"os"
 	"sync"
 
@@ -14,26 +15,26 @@ type FileStore struct {
 	mu       sync.Mutex
 }
 
-// NewFileStore creates a new FileStore instance.
 func NewFileStore(filePath string) *FileStore {
 	return &FileStore{filePath: filePath}
 }
 
-// AddExpense adds a new expense to the file.
+// AddExpense appends a new expense as a JSON line.
 func (fs *FileStore) AddExpense(expense models.Expense) error {
 	fs.mu.Lock()
 	defer fs.mu.Unlock()
 
-	expenses, err := fs.GetExpenses()
+	file, err := os.OpenFile(fs.filePath, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
 	if err != nil {
 		return err
 	}
+	defer file.Close()
 
-	expenses = append(expenses, expense)
-	return fs.saveExpenses(expenses)
+	encoder := json.NewEncoder(file)
+	return encoder.Encode(expense)
 }
 
-// GetExpenses retrieves all expenses from the file.
+// GetExpenses reads all JSON lines into a slice.
 func (fs *FileStore) GetExpenses() ([]models.Expense, error) {
 	fs.mu.Lock()
 	defer fs.mu.Unlock()
@@ -41,20 +42,25 @@ func (fs *FileStore) GetExpenses() ([]models.Expense, error) {
 	file, err := os.Open(fs.filePath)
 	if err != nil {
 		if errors.Is(err, os.ErrNotExist) {
-			return []models.Expense{}, nil // Return empty if file doesn't exist
+			return []models.Expense{}, nil
 		}
 		return nil, err
 	}
 	defer file.Close()
 
 	var expenses []models.Expense
-	if err := json.NewDecoder(file).Decode(&expenses); err != nil && err.Error() != "EOF" {
-		return nil, err
+	decoder := json.NewDecoder(file)
+	for decoder.More() {
+		var expense models.Expense
+		if err := decoder.Decode(&expense); err != nil {
+			return nil, err
+		}
+		expenses = append(expenses, expense)
 	}
 	return expenses, nil
 }
 
-// UpdateExpense updates an existing expense in the file.
+// UpdateExpense and DeleteExpense require rewriting the entire file.
 func (fs *FileStore) UpdateExpense(id int, updatedExpense models.Expense) error {
 	fs.mu.Lock()
 	defer fs.mu.Unlock()
@@ -64,16 +70,21 @@ func (fs *FileStore) UpdateExpense(id int, updatedExpense models.Expense) error 
 		return err
 	}
 
+	found := false
 	for i, expense := range expenses {
 		if expense.ID == id {
 			expenses[i] = updatedExpense
-			return fs.saveExpenses(expenses)
+			found = true
+			break
 		}
 	}
-	return errors.New("expense not found")
+	if !found {
+		return errors.New("expense not found")
+	}
+
+	return fs.saveExpenses(expenses)
 }
 
-// DeleteExpense deletes an expense by ID.
 func (fs *FileStore) DeleteExpense(id int) error {
 	fs.mu.Lock()
 	defer fs.mu.Unlock()
@@ -83,16 +94,22 @@ func (fs *FileStore) DeleteExpense(id int) error {
 		return err
 	}
 
+	found := false
 	for i, expense := range expenses {
 		if expense.ID == id {
 			expenses = append(expenses[:i], expenses[i+1:]...)
-			return fs.saveExpenses(expenses)
+			found = true
+			break
 		}
 	}
-	return errors.New("expense not found")
+	if !found {
+		return errors.New("expense not found")
+	}
+
+	return fs.saveExpenses(expenses)
 }
 
-// saveExpenses saves the expenses to the file.
+// saveExpenses writes all expenses as JSON lines.
 func (fs *FileStore) saveExpenses(expenses []models.Expense) error {
 	file, err := os.Create(fs.filePath)
 	if err != nil {
@@ -101,5 +118,37 @@ func (fs *FileStore) saveExpenses(expenses []models.Expense) error {
 	defer file.Close()
 
 	encoder := json.NewEncoder(file)
-	return encoder.Encode(expenses)
+	for _, expense := range expenses {
+		if err := encoder.Encode(expense); err != nil {
+			return err
+		}
+	}
+	return nil
+}
+func (fs *FileStore) GetNextID() (int, error) {
+	fs.mu.Lock()
+	defer fs.mu.Unlock()
+
+	idFilePath := "data/last_id.txt"
+	data, err := os.ReadFile(idFilePath)
+	if err != nil {
+		if errors.Is(err, os.ErrNotExist) {
+			return 1, nil // Start at 1 if file doesn't exist
+		}
+		return 0, err
+	}
+
+	var lastID int
+	if _, err := fmt.Sscanf(string(data), "%d", &lastID); err != nil {
+		return 0, err
+	}
+	return lastID + 1, nil
+}
+
+func (fs *FileStore) SaveLastID(id int) error {
+	fs.mu.Lock()
+	defer fs.mu.Unlock()
+
+	idFilePath := "data/last_id.txt"
+	return os.WriteFile(idFilePath, []byte(fmt.Sprintf("%d", id)), 0644)
 }

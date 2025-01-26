@@ -23,15 +23,24 @@ func (es *ExpenseService) AddExpense(description string, amount float64, categor
 		return errors.New("invalid description or amount")
 	}
 
-	expenses, _ := es.repo.GetExpenses()
+	nextID, err := es.repo.GetNextID()
+	if err != nil {
+		return err
+	}
+
 	newExpense := models.Expense{
-		ID:          len(expenses) + 1, // Generate a simple ID
+		ID:          nextID,
 		Description: description,
 		Amount:      amount,
 		Date:        time.Now(),
 		Category:    category,
 	}
-	return es.repo.AddExpense(newExpense)
+
+	if err := es.repo.AddExpense(newExpense); err != nil {
+		return err
+	}
+
+	return es.repo.SaveLastID(nextID)
 }
 
 // GetSummary calculates the total of all expenses.

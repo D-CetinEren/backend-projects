@@ -8,4 +8,6 @@ type Repository interface {
 	GetExpenses() ([]models.Expense, error)
 	UpdateExpense(id int, updatedExpense models.Expense) error
 	DeleteExpense(id int) error
+	GetNextID() (int, error)
+	SaveLastID(id int) error
 }
