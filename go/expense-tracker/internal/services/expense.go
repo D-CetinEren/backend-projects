@@ -6,6 +6,7 @@ import (
 
 	"github.com/D-CetinEren/backend-projects/go/expense-tracker/internal/models"
 	"github.com/D-CetinEren/backend-projects/go/expense-tracker/internal/repository"
+	"github.com/google/uuid"
 )
 
 type ExpenseService struct {
@@ -23,24 +24,14 @@ func (es *ExpenseService) AddExpense(description string, amount float64, categor
 		return errors.New("invalid description or amount")
 	}
 
-	nextID, err := es.repo.GetNextID()
-	if err != nil {
-		return err
-	}
-
 	newExpense := models.Expense{
-		ID:          nextID,
+		ID:          uuid.New().String(), // Generate UUID
 		Description: description,
 		Amount:      amount,
 		Date:        time.Now(),
 		Category:    category,
 	}
-
-	if err := es.repo.AddExpense(newExpense); err != nil {
-		return err
-	}
-
-	return es.repo.SaveLastID(nextID)
+	return es.repo.AddExpense(newExpense)
 }
 
 // GetSummary calculates the total of all expenses.

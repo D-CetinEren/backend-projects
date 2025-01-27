@@ -28,9 +28,13 @@ var listCmd = &cobra.Command{
 			return
 		}
 
-		fmt.Printf("%-5s %-15s %-20s %-10s\n", "ID", "Date", "Description", "Amount")
+		fmt.Printf("%-36s %-15s %-20s %-10s\n", "ID", "Date", "Description", "Amount")
 		for _, expense := range expenses {
-			fmt.Printf("%-5d %-15s %-20s $%.2f\n", expense.ID, expense.Date.Format("2006-01-02"), expense.Description, expense.Amount)
+			fmt.Printf("%-36s %-15s %-20s $%.2f\n",
+				expense.ID,
+				expense.Date.Format("2006-01-02"),
+				expense.Description,
+				expense.Amount)
 		}
 	},
 }

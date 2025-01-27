@@ -3,7 +3,6 @@ package repository
 import (
 	"encoding/json"
 	"errors"
-	"fmt"
 	"os"
 	"sync"
 
@@ -61,7 +60,7 @@ func (fs *FileStore) GetExpenses() ([]models.Expense, error) {
 }
 
 // UpdateExpense and DeleteExpense require rewriting the entire file.
-func (fs *FileStore) UpdateExpense(id int, updatedExpense models.Expense) error {
+func (fs *FileStore) UpdateExpense(id string, updatedExpense models.Expense) error {
 	fs.mu.Lock()
 	defer fs.mu.Unlock()
 
@@ -85,7 +84,7 @@ func (fs *FileStore) UpdateExpense(id int, updatedExpense models.Expense) error 
 	return fs.saveExpenses(expenses)
 }
 
-func (fs *FileStore) DeleteExpense(id int) error {
+func (fs *FileStore) DeleteExpense(id string) error {
 	fs.mu.Lock()
 	defer fs.mu.Unlock()
 
@@ -124,31 +123,4 @@ func (fs *FileStore) saveExpenses(expenses []models.Expense) error {
 		}
 	}
 	return nil
-}
-func (fs *FileStore) GetNextID() (int, error) {
-	fs.mu.Lock()
-	defer fs.mu.Unlock()
-
-	idFilePath := "data/last_id.txt"
-	data, err := os.ReadFile(idFilePath)
-	if err != nil {
-		if errors.Is(err, os.ErrNotExist) {
-			return 1, nil // Start at 1 if file doesn't exist
-		}
-		return 0, err
-	}
-
-	var lastID int
-	if _, err := fmt.Sscanf(string(data), "%d", &lastID); err != nil {
-		return 0, err
-	}
-	return lastID + 1, nil
-}
-
-func (fs *FileStore) SaveLastID(id int) error {
-	fs.mu.Lock()
-	defer fs.mu.Unlock()
-
-	idFilePath := "data/last_id.txt"
-	return os.WriteFile(idFilePath, []byte(fmt.Sprintf("%d", id)), 0644)
 }
