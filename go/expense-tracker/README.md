@@ -104,6 +104,6 @@ expense-tracker/
 - [ ] Support for more advanced filtering (e.g., by date range, category).  
 - [ ] Implement encryption for sensitive data.  
 - [ ] Allow database storage using SQLite for improved scalability.  
-- [ ] Add unit tests for better reliability.  
+- [X] Add unit tests for better reliability.  
 
 ---
