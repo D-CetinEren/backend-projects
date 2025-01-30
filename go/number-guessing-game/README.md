@@ -8,7 +8,7 @@ Welcome to the Number Guessing Game! 🎉 This is a simple CLI-based game where 
 - Players can choose a difficulty level:
   - **Easy**: 10 chances
   - **Medium**: 5 chances
-  - **Hard**: 3 chances
+  - **Hard**: 3 chancesS
 - Hints are provided after each incorrect guess:
   - Whether the secret number is greater or lesser than your guess.
 - Option to play multiple rounds.
@@ -21,3 +21,22 @@ Welcome to the Number Guessing Game! 🎉 This is a simple CLI-based game where 
 3. Run the game:
    ```bash
    go run main.go
+
+## Directory Structure
+```plaintext
+📂 number-guessing-game/
+│
+├── internal/
+│   ├── difficulty/
+│   │   └── difficulty.go
+│   ├── game/
+│   │   └── game.go
+│   ├── secretnumber/
+│   │   └── secretnumber.go
+│   └── welcome/
+│       └── selcome.go
+│
+├── go.mod
+├── main.go
+└── README.md
+```

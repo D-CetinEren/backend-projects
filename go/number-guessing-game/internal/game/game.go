@@ -8,7 +8,13 @@ func Game(secretNumber, attempts int) {
 		var guess int
 		fmt.Printf("%d", secretNumber)
 		fmt.Printf("Enter your guess (%d attempts left): ", attempts)
-		fmt.Scan(&guess)
+
+		_, err := fmt.Scanf("%d", &guess)
+		if err != nil {
+			fmt.Println("Invalid input. Please enter a number.")
+			fmt.Scanln()
+			continue
+		}
 
 		if guess == secretNumber {
 			fmt.Printf("Congratulations! You guessed the correct number in %d attempts.\n", remainder-attempts+1)

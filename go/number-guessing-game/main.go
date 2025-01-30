@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"strings"
 
 	"github.com/D-CetinEren/backend-projects/go/number-guessing-game/internal/difficulty"
 	"github.com/D-CetinEren/backend-projects/go/number-guessing-game/internal/game"
@@ -21,8 +22,15 @@ func main() {
 		var playAgain string
 		for {
 			fmt.Println("Do you want to play again? (yes/no)")
-			fmt.Scan(&playAgain)
+			_, err := fmt.Scanf("%s", &playAgain)
+			if err != nil {
+				fmt.Println("Invalid input. Please enter 'yes' or 'no'.")
+				fmt.Scanln()
+				continue
+			}
+			//fmt.Scan(&playAgain)
 
+			playAgain = strings.ToLower(playAgain)
 			if playAgain == "yes" || playAgain == "no" {
 				break
 			}
