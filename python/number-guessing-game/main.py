@@ -1,31 +1,25 @@
-import random
+import welcome
+import secretnumber
+import difficulty
+import game
 
 def main():
-    lower_bound = 1
-    upper_bound = 100
-    secret_number = random.randint(lower_bound, upper_bound)
-    attempts = 0
-
-    print(f"Guess the number between {lower_bound} and {upper_bound}.")
+    welcome.welcome()
 
     while True:
-        try:
-            guess = int(input("Enter your guess: "))
-            attempts += 1
+        secret = secretnumber.generate_secret_number()
+        attempts = difficulty.select_difficulty()
+        game.play_game(secret, attempts)
 
-            if guess < lower_bound or guess > upper_bound:
-                print(f"Please enter a number between {lower_bound} and {upper_bound}.")
-                continue
-
-            if guess < secret_number:
-                print("Too low!")
-            elif guess > secret_number:
-                print("Too high!")
-            else:
-                print(f"Congratulations! You've guessed the number in {attempts} attempts.")
+        while True:
+            play_again = input("Do you want to play again? (yes/no): ").strip().lower()
+            if play_again in ["yes", "no"]:
                 break
-        except ValueError:
-            print("Invalid input. Please enter a valid integer.")
+            print("Invalid input. Please enter 'yes' or 'no'.")
+
+        if play_again == "no":
+            print("Thanks for playing! Goodbye. 👋")
+            break
 
 if __name__ == "__main__":
     main()

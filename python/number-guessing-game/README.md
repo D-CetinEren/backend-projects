@@ -12,3 +12,15 @@ This is a simple command-line number guessing game implemented in Python. The pr
 - Tracks the number of attempts taken.
 - Ensures valid input (only integers within the allowed range).
 - Handles invalid inputs gracefully.
+
+## Folder Structure
+```plaintext
+📂 number_guessing_game/
+│
+├── difficulty.py
+├── game.py
+├── secretnumber.py
+├── welcome.py
+├── main.py
+└── README.md
+```plaintext
