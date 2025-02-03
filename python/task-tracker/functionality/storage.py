@@ -1,6 +1,6 @@
 import json
 import os
-from functionality.task import Task
+from task import Task
 
 TASKS_FILE = "tasks.json"
 

@@ -1,14 +1,18 @@
 import argparse
 import time
-from functionality import storage
+import sys
+
+sys.path.insert(0, '/home/cheren/Desktop/backend-projects/python/task-tracker/functionality')
+
+from storage import read_tasks, write_tasks
 
 def update_task(task_id, new_description):
-    tasks = storage.read_tasks()
+    tasks = read_tasks()
     for task in tasks:
         if task.id == task_id:
             task.description = new_description
             task.updated_at = time.strftime("%Y-%m-%d %H:%M:%S")
-            storage.write_tasks(tasks)
+            write_tasks(tasks)
             print(f"Task {task_id} updated successfully.")
             return
     print(f"Task with ID {task_id} not found.")
