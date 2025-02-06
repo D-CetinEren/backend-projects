@@ -12,7 +12,14 @@ def delete_task(task_id):
     print(f"Task {task_id} deleted successfully.")
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description="Delete a task")
-    parser.add_argument("id", type=int, help="Task ID")
+    parser = argparse.ArgumentParser(
+        description="Delete a task",
+        formatter_class=argparse.RawTextHelpFormatter,
+        epilog="Example use:\n  python3 main.py delete 1"
+        )
+    parser.add_argument("id",
+        type=int,
+        help="Task ID"
+        )
     args = parser.parse_args()
     delete_task(args.id)

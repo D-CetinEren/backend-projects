@@ -18,8 +18,18 @@ def mark_task(task_id, status):
     print(f"Task with ID {task_id} not found.")
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description="Mark a task as done or in progress")
-    parser.add_argument("id", type=int, help="Task ID")
-    parser.add_argument("status", choices=["done", "in-progress"], help="New task status")
+    parser = argparse.ArgumentParser(
+        description="Mark a task as done or in progress",
+        formatter_class=argparse.RawTextHelpFormatter,
+        epilog="Example use:\n  python3 main.py mark 1 'done'"
+        )
+    parser.add_argument("id",
+        type=int,
+        help="Task ID"
+        )
+    parser.add_argument("status",
+        choices=["done", "in-progress"],
+        help="New task status"
+        )
     args = parser.parse_args()
     mark_task(args.id, args.status)

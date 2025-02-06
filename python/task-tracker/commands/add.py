@@ -14,7 +14,14 @@ def add_task(description):
     print(f"Task added successfully (ID: {new_task.id})")
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description="Add a new task")
-    parser.add_argument("description", type=str, help="Task description")
+    parser = argparse.ArgumentParser(
+        description="Add a new task",
+        formatter_class=argparse.RawTextHelpFormatter,
+        epilog="Example use:\n  python3 main.py add 'Workout'"
+        )
+    parser.add_argument("description",
+        type=str, 
+        help="Task description eg. 'Python project'"
+        )
     args = parser.parse_args()
     add_task(args.description)

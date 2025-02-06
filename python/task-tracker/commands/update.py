@@ -18,8 +18,17 @@ def update_task(task_id, new_description):
     print(f"Task with ID {task_id} not found.")
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description="Update a task description")
-    parser.add_argument("id", type=int, help="Task ID")
-    parser.add_argument("description", type=str, help="New task description")
+    parser = argparse.ArgumentParser(description="Update a task description",
+        formatter_class=argparse.RawTextHelpFormatter,
+        epilog="Example use:\n  python3 main.py mark 1 'Chorus'"
+        )
+    parser.add_argument("id",
+        type=int,
+        help="Task ID"
+        )
+    parser.add_argument("description",
+        type=str,
+        help="New task description"
+        )
     args = parser.parse_args()
     update_task(args.id, args.description)
